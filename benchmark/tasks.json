@@ -1,0 +1,2707 @@
+[
+ {
+  "id": "T01",
+  "title": "Two-Input AND Gate",
+  "complexity": "basic",
+  "requirement": "Generate a block that outputs TRUE only when both inputs are TRUE. * **I/O Variables**: * Inputs: `IN1` (BOOL), `IN2` (BOOL) * Output: `OUT` (BOOL)",
+  "inputs": [
+   {
+    "name": "IN1",
+    "type": "BOOL"
+   },
+   {
+    "name": "IN2",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "OUT",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T01_AND_Gate\nVAR_INPUT\n    IN1 : BOOL;\n    IN2 : BOOL;\nEND_VAR\nVAR_OUTPUT\n    OUT : BOOL;\nEND_VAR\nOUT := IN1 AND IN2;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "AND gate truth table",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN1": false,
+       "IN2": false
+      },
+      "expect": {
+       "OUT": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN1": false,
+       "IN2": true
+      },
+      "expect": {
+       "OUT": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN1": true,
+       "IN2": false
+      },
+      "expect": {
+       "OUT": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN1": true,
+       "IN2": true
+      },
+      "expect": {
+       "OUT": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN1": true,
+       "IN2": false
+      },
+      "expect": {
+       "OUT": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T02",
+  "title": "On-Delay Timer (TON)",
+  "complexity": "basic",
+  "requirement": "Implement an on-delay timer that sets the output TRUE after a specified duration. * **I/O Variables**: * Inputs: `IN` (BOOL), `PT` (TIME) * Outputs: `Q` (BOOL), `ET` (TIME)",
+  "inputs": [
+   {
+    "name": "IN",
+    "type": "BOOL"
+   },
+   {
+    "name": "PT",
+    "type": "TIME"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Q",
+    "type": "BOOL"
+   },
+   {
+    "name": "ET",
+    "type": "TIME"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T02_TimerOn\nVAR_INPUT\n    IN : BOOL;\n    PT : TIME;\nEND_VAR\nVAR_OUTPUT\n    Q : BOOL;\n    ET : TIME;\nEND_VAR\nVAR\n    timer : TON;\nEND_VAR\ntimer(IN := IN, PT := PT, Q => Q, ET => ET);\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "TON 3s on-delay",
+    "steps": [
+     {
+      "cycles": 10,
+      "dt_ms": 100,
+      "in": {
+       "IN": true,
+       "PT": 3000
+      },
+      "expect": {
+       "Q": false
+      }
+     },
+     {
+      "cycles": 21,
+      "dt_ms": 100,
+      "expect": {
+       "Q": true
+      },
+      "expect_time": {
+       "ET": {
+        "ms": 3000,
+        "tol_ms": 150
+       }
+      }
+     },
+     {
+      "cycles": 5,
+      "dt_ms": 100,
+      "expect": {
+       "Q": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN": false
+      },
+      "expect": {
+       "Q": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T03",
+  "title": "SR Flip-Flop",
+  "complexity": "basic",
+  "requirement": "Set-dominant latch logic. * **I/O Variables**: * Inputs: `S1` (BOOL), `R` (BOOL) * Output: `Q1` (BOOL)",
+  "inputs": [
+   {
+    "name": "S1",
+    "type": "BOOL"
+   },
+   {
+    "name": "R",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Q1",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T03_SR_Latch\nVAR_INPUT\n    S1 : BOOL;\n    R : BOOL;\nEND_VAR\nVAR_OUTPUT\n    Q1 : BOOL;\nEND_VAR\nIF S1 THEN\n    Q1 := TRUE;\nELSIF R THEN\n    Q1 := FALSE;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "SR latch set-dominant",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "S1": true,
+       "R": false
+      },
+      "expect": {
+       "Q1": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "S1": false,
+       "R": false
+      },
+      "expect": {
+       "Q1": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "S1": false,
+       "R": true
+      },
+      "expect": {
+       "Q1": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "S1": false,
+       "R": false
+      },
+      "expect": {
+       "Q1": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "S1": true,
+       "R": true
+      },
+      "expect": {
+       "Q1": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T04",
+  "title": "Up-Counter (CTU)",
+  "complexity": "basic",
+  "requirement": "Count rising edges of an input signal. * **I/O Variables**: * Inputs: `CU` (BOOL), `RESET` (BOOL), `PV` (INT) * Outputs: `Q` (BOOL), `CV` (INT)",
+  "inputs": [
+   {
+    "name": "CU",
+    "type": "BOOL"
+   },
+   {
+    "name": "RESET",
+    "type": "BOOL"
+   },
+   {
+    "name": "PV",
+    "type": "INT"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Q",
+    "type": "BOOL"
+   },
+   {
+    "name": "CV",
+    "type": "INT"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T04_UpCounter\nVAR_INPUT\nCU : BOOL;\nRESET : BOOL;\nPV : INT;\nEND_VAR\nVAR_OUTPUT\nQ : BOOL;\nCV : INT;\nEND_VAR\nVAR\nlast_CU : BOOL;\nEND_VAR\nIF RESET THEN\nCV := 0;\nELSIF CU AND NOT last_CU THEN\nCV := CV + 1;\nEND_IF;\nlast_CU := CU;\nQ := (CV >= PV);\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "CTU count to PV=3 with reset",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CU": true,
+       "RESET": false,
+       "PV": 3
+      },
+      "expect": {
+       "CV": 1,
+       "Q": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CU": false
+      },
+      "expect": {
+       "CV": 1
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CU": true
+      },
+      "expect": {
+       "CV": 2,
+       "Q": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CU": false
+      },
+      "expect": {
+       "CV": 2
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CU": true
+      },
+      "expect": {
+       "CV": 3,
+       "Q": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "RESET": true
+      },
+      "expect": {
+       "CV": 0,
+       "Q": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T05",
+  "title": "Off-Delay Timer (TOF)",
+  "complexity": "basic",
+  "requirement": "Implement an off-delay timer: output stays TRUE while IN is TRUE and remains TRUE for PT duration after IN falls FALSE.",
+  "inputs": [
+   {
+    "name": "IN",
+    "type": "BOOL"
+   },
+   {
+    "name": "PT",
+    "type": "TIME"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Q",
+    "type": "BOOL"
+   },
+   {
+    "name": "ET",
+    "type": "TIME"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "tof_inst : TOF",
+  "ground_truth": "FUNCTION_BLOCK T05_TimerOff\nVAR_INPUT\n    IN : BOOL;\n    PT : TIME;\nEND_VAR\nVAR_OUTPUT\n    Q : BOOL;\n    ET : TIME;\nEND_VAR\nVAR\n    tof_inst : TOF;\nEND_VAR\n    tof_inst(IN := IN, PT := PT, Q => Q, ET => ET);\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "TOF 2s off-delay",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN": true,
+       "PT": 2000
+      },
+      "expect": {
+       "Q": true
+      }
+     },
+     {
+      "cycles": 10,
+      "dt_ms": 100,
+      "in": {
+       "IN": false
+      },
+      "expect": {
+       "Q": true
+      }
+     },
+     {
+      "cycles": 11,
+      "dt_ms": 100,
+      "expect": {
+       "Q": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T06",
+  "title": "Temperature Unit Converter",
+  "complexity": "basic",
+  "requirement": "Convert Celsius to Fahrenheit. * **I/O Variables**: * Input: `TempC` (REAL) * Output: `TempF` (REAL)",
+  "inputs": [
+   {
+    "name": "TempC",
+    "type": "REAL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "TempF",
+    "type": "REAL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T06_TempConv\nVAR_INPUT\n    TempC : REAL;\nEND_VAR\nVAR_OUTPUT\n    TempF : REAL;\nEND_VAR\nTempF := (TempC * 1.8) + 32.0;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "Celsius to Fahrenheit",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "TempC": 0.0
+      },
+      "expect_approx": {
+       "TempF": {
+        "value": 32.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "TempC": 100.0
+      },
+      "expect_approx": {
+       "TempF": {
+        "value": 212.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "TempC": -40.0
+      },
+      "expect_approx": {
+       "TempF": {
+        "value": -40.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T07",
+  "title": "Blink Generator",
+  "complexity": "basic",
+  "requirement": "Toggle a bit at a 1Hz frequency (500ms ON, 500ms OFF). * **I/O Variables**: * Input: `ENABLE` (BOOL) * Output: `OUT` (BOOL)",
+  "inputs": [
+   {
+    "name": "ENABLE",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "OUT",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T07_Blinker\nVAR_INPUT\n    ENABLE : BOOL;\nEND_VAR\nVAR_OUTPUT\n    OUT : BOOL;\nEND_VAR\nVAR\n    timer : TON;\nEND_VAR\ntimer(IN := NOT timer.Q AND ENABLE, PT := T#500ms);\nIF timer.Q THEN\n    OUT := NOT OUT;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "500ms blink toggling",
+    "steps": [
+     {
+      "cycles": 6,
+      "dt_ms": 100,
+      "in": {
+       "ENABLE": true
+      },
+      "expect": {
+       "OUT": true
+      }
+     },
+     {
+      "cycles": 7,
+      "dt_ms": 100,
+      "expect": {
+       "OUT": false
+      }
+     },
+     {
+      "cycles": 7,
+      "dt_ms": 100,
+      "expect": {
+       "OUT": true
+      }
+     },
+     {
+      "cycles": 3,
+      "dt_ms": 100,
+      "in": {
+       "ENABLE": false
+      },
+      "expect": {
+       "OUT": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T08",
+  "title": "Greater Than Comparison",
+  "complexity": "basic",
+  "requirement": "Compare two integers and set output if the first is greater. * **I/O Variables**: * Inputs: `VAL1` (INT), `VAL2` (INT) * Output: `RESULT` (BOOL)",
+  "inputs": [
+   {
+    "name": "VAL1",
+    "type": "INT"
+   },
+   {
+    "name": "VAL2",
+    "type": "INT"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "RESULT",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T08_Compare\nVAR_INPUT\n    VAL1 : INT;\n    VAL2 : INT;\nEND_VAR\nVAR_OUTPUT\n    RESULT : BOOL;\nEND_VAR\nRESULT := VAL1 > VAL2;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "integer greater-than",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "VAL1": 5,
+       "VAL2": 3
+      },
+      "expect": {
+       "RESULT": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "VAL1": 3,
+       "VAL2": 5
+      },
+      "expect": {
+       "RESULT": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "VAL1": 4,
+       "VAL2": 4
+      },
+      "expect": {
+       "RESULT": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T09",
+  "title": "Hysteresis Control",
+  "complexity": "basic",
+  "requirement": "Implement a simple Schmitt trigger logic. * **I/O Variables**: * Inputs: `Val` (REAL), `High` (REAL), `Low` (REAL) * Output: `Q` (BOOL)",
+  "inputs": [
+   {
+    "name": "Val",
+    "type": "REAL"
+   },
+   {
+    "name": "High",
+    "type": "REAL"
+   },
+   {
+    "name": "Low",
+    "type": "REAL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Q",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T09_Hysteresis\nVAR_INPUT\n    Val : REAL;\n    High : REAL;\n    Low : REAL;\nEND_VAR\nVAR_OUTPUT\n    Q : BOOL;\nEND_VAR\nIF Val >= High THEN\n    Q := TRUE;\nELSIF Val <= Low THEN\n    Q := FALSE;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "Schmitt trigger hysteresis (High=10, Low=5)",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val": 9.0,
+       "High": 10.0,
+       "Low": 5.0
+      },
+      "expect": {
+       "Q": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val": 7.0
+      },
+      "expect": {
+       "Q": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val": 10.0
+      },
+      "expect": {
+       "Q": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val": 7.0
+      },
+      "expect": {
+       "Q": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val": 5.0
+      },
+      "expect": {
+       "Q": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val": 7.0
+      },
+      "expect": {
+       "Q": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val": 9.9
+      },
+      "expect": {
+       "Q": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T10",
+  "title": "Absolute Value",
+  "complexity": "basic",
+  "requirement": "Return the absolute value of a signed integer. * **I/O Variables**: * Input: `InputVal` (INT) * Output: `AbsVal` (INT)",
+  "inputs": [
+   {
+    "name": "InputVal",
+    "type": "INT"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "AbsVal",
+    "type": "INT"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T10_Absolute\nVAR_INPUT\n    InputVal : INT;\nEND_VAR\nVAR_OUTPUT\n    AbsVal : INT;\nEND_VAR\nIF InputVal < 0 THEN\n    AbsVal := -InputVal;\nELSE\n    AbsVal := InputVal;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "absolute value",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "InputVal": 7
+      },
+      "expect": {
+       "AbsVal": 7
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "InputVal": -9
+      },
+      "expect": {
+       "AbsVal": 9
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "InputVal": 0
+      },
+      "expect": {
+       "AbsVal": 0
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T11",
+  "title": "Star-Delta Motor Starter",
+  "complexity": "intermediate",
+  "requirement": "Sequence a motor start from Star to Delta configuration after 5 seconds. * **I/O Variables**: * Inputs: `START` (BOOL), `STOP` (BOOL) * Outputs: `Main` (BOOL), `Star` (BOOL), `Delta` (BOOL)",
+  "inputs": [
+   {
+    "name": "START",
+    "type": "BOOL"
+   },
+   {
+    "name": "STOP",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Main",
+    "type": "BOOL"
+   },
+   {
+    "name": "Star",
+    "type": "BOOL"
+   },
+   {
+    "name": "Delta",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T11_StarDelta\nVAR_INPUT\nSTART : BOOL;\nSTOP : BOOL;\nEND_VAR\nVAR_OUTPUT\nMain : BOOL;\nStar : BOOL;\nDelta : BOOL;\nEND_VAR\nVAR\ntimer : TON;\nRunning : BOOL;\nEND_VAR\nIF START THEN Running := TRUE; END_IF;\nIF STOP THEN Running := FALSE; END_IF;\nMain := Running;\ntimer(IN := Running, PT := T#5s);\nStar := Running AND NOT timer.Q;\nDelta := Running AND timer.Q;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "star-delta 5s transition",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "START": true,
+       "STOP": false
+      },
+      "expect": {
+       "Main": true,
+       "Star": true,
+       "Delta": false
+      }
+     },
+     {
+      "cycles": 10,
+      "dt_ms": 100,
+      "in": {
+       "START": false
+      },
+      "expect": {
+       "Main": true,
+       "Star": true,
+       "Delta": false
+      }
+     },
+     {
+      "cycles": 41,
+      "dt_ms": 100,
+      "expect": {
+       "Main": true,
+       "Star": false,
+       "Delta": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "STOP": true
+      },
+      "expect": {
+       "Main": false,
+       "Star": false,
+       "Delta": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T12",
+  "title": "DOL Motor Starter with Overload Protection",
+  "complexity": "intermediate",
+  "requirement": "Direct-On-Line motor starter: latch RUN from START pushbutton, drop out on STOP or thermal OVERLOAD; OVERLOAD latches FAULT until reset by STOP.",
+  "inputs": [
+   {
+    "name": "START",
+    "type": "BOOL"
+   },
+   {
+    "name": "STOP",
+    "type": "BOOL"
+   },
+   {
+    "name": "OVERLOAD",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "RUN",
+    "type": "BOOL"
+   },
+   {
+    "name": "FAULT",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T12_DOL\nVAR_INPUT\n    START : BOOL;\n    STOP : BOOL;\n    OVERLOAD : BOOL;\nEND_VAR\nVAR_OUTPUT\n    RUN : BOOL;\n    FAULT : BOOL;\nEND_VAR\n    IF OVERLOAD THEN\n        FAULT := TRUE;\n    END_IF;\n    IF STOP THEN\n        FAULT := FALSE;\n    END_IF;\n    IF (START OR RUN) AND NOT STOP AND NOT FAULT THEN\n        RUN := TRUE;\n    ELSE\n        RUN := FALSE;\n    END_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "DOL start/overload/reset",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "START": true,
+       "STOP": false,
+       "OVERLOAD": false
+      },
+      "expect": {
+       "RUN": true,
+       "FAULT": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "START": false
+      },
+      "expect": {
+       "RUN": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "OVERLOAD": true
+      },
+      "expect": {
+       "RUN": false,
+       "FAULT": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "OVERLOAD": false
+      },
+      "expect": {
+       "RUN": false,
+       "FAULT": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "START": true
+      },
+      "expect": {
+       "RUN": false,
+       "FAULT": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "STOP": true
+      },
+      "expect": {
+       "RUN": false,
+       "FAULT": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "STOP": false,
+       "START": true
+      },
+      "expect": {
+       "RUN": true,
+       "FAULT": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T13",
+  "title": "Analog Clamping",
+  "complexity": "intermediate",
+  "requirement": "Ensure an analog value stays within safe bounds (Min/Max). * **I/O Variables**: * Inputs: `IN` (REAL), `MinL` (REAL), `MaxL` (REAL) * Output: `OUT` (REAL)",
+  "inputs": [
+   {
+    "name": "IN",
+    "type": "REAL"
+   },
+   {
+    "name": "MinL",
+    "type": "REAL"
+   },
+   {
+    "name": "MaxL",
+    "type": "REAL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "OUT",
+    "type": "REAL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T13_Clamp\nVAR_INPUT\nIN : REAL;\nMinL : REAL;\nMaxL : REAL;\nEND_VAR\nVAR_OUTPUT\nOUT : REAL;\nEND_VAR\nIF IN < MinL THEN\nOUT := MinL;\nELSIF IN > MaxL THEN\nOUT := MaxL;\nELSE\nOUT := IN;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "analog clamping 0..10",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN": 5.0,
+       "MinL": 0.0,
+       "MaxL": 10.0
+      },
+      "expect_approx": {
+       "OUT": {
+        "value": 5.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN": -3.0
+      },
+      "expect_approx": {
+       "OUT": {
+        "value": 0.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN": 15.0
+      },
+      "expect_approx": {
+       "OUT": {
+        "value": 10.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "IN": 10.0
+      },
+      "expect_approx": {
+       "OUT": {
+        "value": 10.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T14",
+  "title": "Conveyor Box Sorting",
+  "complexity": "intermediate",
+  "requirement": "On a running conveyor, detect boxes at a photo sensor (rising edge of PhotoIn): tall boxes (SizeHigh=TRUE) are diverted (Diverter=TRUE) and counted in CountDivert, short boxes pass (Diverter=FALSE) and increment CountPass. When the conveyor stops, retract the diverter.",
+  "inputs": [
+   {
+    "name": "ConveyorRun",
+    "type": "BOOL"
+   },
+   {
+    "name": "PhotoIn",
+    "type": "BOOL"
+   },
+   {
+    "name": "SizeHigh",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Diverter",
+    "type": "BOOL"
+   },
+   {
+    "name": "CountPass",
+    "type": "INT"
+   },
+   {
+    "name": "CountDivert",
+    "type": "INT"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "last_PhotoIn : BOOL",
+  "ground_truth": "FUNCTION_BLOCK T14_Sorter\nVAR_INPUT\n    ConveyorRun : BOOL;\n    PhotoIn : BOOL;\n    SizeHigh : BOOL;\nEND_VAR\nVAR_OUTPUT\n    Diverter : BOOL;\n    CountPass : INT;\n    CountDivert : INT;\nEND_VAR\nVAR\n    last_PhotoIn : BOOL;\nEND_VAR\n    IF NOT ConveyorRun THEN\n        Diverter := FALSE;\n    ELSIF PhotoIn AND NOT last_PhotoIn THEN\n        IF SizeHigh THEN\n            Diverter := TRUE;\n            CountDivert := CountDivert + 1;\n        ELSE\n            Diverter := FALSE;\n            CountPass := CountPass + 1;\n        END_IF;\n    END_IF;\n    last_PhotoIn := PhotoIn;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "sort tall vs short boxes",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "ConveyorRun": true,
+       "PhotoIn": false,
+       "SizeHigh": false
+      },
+      "expect": {
+       "Diverter": false,
+       "CountPass": 0,
+       "CountDivert": 0
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PhotoIn": true,
+       "SizeHigh": true
+      },
+      "expect": {
+       "Diverter": true,
+       "CountDivert": 1,
+       "CountPass": 0
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PhotoIn": false
+      },
+      "expect": {
+       "Diverter": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PhotoIn": true,
+       "SizeHigh": false
+      },
+      "expect": {
+       "Diverter": false,
+       "CountPass": 1,
+       "CountDivert": 1
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PhotoIn": false
+      },
+      "expect": {
+       "Diverter": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PhotoIn": true,
+       "SizeHigh": true
+      },
+      "expect": {
+       "Diverter": true,
+       "CountDivert": 2,
+       "CountPass": 1
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "ConveyorRun": false,
+       "PhotoIn": false
+      },
+      "expect": {
+       "Diverter": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T15",
+  "title": "Lead-Lag Pump Control",
+  "complexity": "intermediate",
+  "requirement": "Alternates between two pumps to balance wear. * **I/O Variables**: * Inputs: `Demand` (BOOL), `Swap` (BOOL) * Outputs: `Pump1` (BOOL), `Pump2` (BOOL)",
+  "inputs": [
+   {
+    "name": "Demand",
+    "type": "BOOL"
+   },
+   {
+    "name": "Swap",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Pump1",
+    "type": "BOOL"
+   },
+   {
+    "name": "Pump2",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T15_LeadLag\nVAR_INPUT\n    Demand : BOOL;\n    Swap : BOOL;\nEND_VAR\nVAR_OUTPUT\n    Pump1 : BOOL;\n    Pump2 : BOOL;\nEND_VAR\nVAR\n    LeadPump1 : BOOL := TRUE;\nEND_VAR\nIF Swap THEN LeadPump1 := NOT LeadPump1; END_IF;\nIF Demand THEN\n    Pump1 := LeadPump1;\n    Pump2 := NOT LeadPump1;\nELSE\n    Pump1 := FALSE;\n    Pump2 := FALSE;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "lead-lag alternation",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Demand": true,
+       "Swap": false
+      },
+      "expect": {
+       "Pump1": true,
+       "Pump2": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Demand": false
+      },
+      "expect": {
+       "Pump1": false,
+       "Pump2": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Demand": true
+      },
+      "expect": {
+       "Pump1": true,
+       "Pump2": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Swap": true,
+       "Demand": false
+      },
+      "expect": {
+       "Pump1": false,
+       "Pump2": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Swap": false,
+       "Demand": true
+      },
+      "expect": {
+       "Pump1": false,
+       "Pump2": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Demand": false
+      },
+      "expect": {
+       "Pump1": false,
+       "Pump2": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T16",
+  "title": "Two-Way Traffic Light",
+  "complexity": "intermediate",
+  "requirement": "Sequence: Green (10s), Yellow (3s), Red (13s). * **I/O Variables**: * Output: `G` (BOOL), `Y` (BOOL), `R` (BOOL)",
+  "inputs": [],
+  "outputs": [
+   {
+    "name": "G",
+    "type": "BOOL"
+   },
+   {
+    "name": "Y",
+    "type": "BOOL"
+   },
+   {
+    "name": "R",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T16_Traffic\nVAR_OUTPUT\n    G : BOOL;\n    Y : BOOL;\n    R : BOOL;\nEND_VAR\nVAR\n    Phase : INT;\n    Timer : TON;\nEND_VAR\nCASE Phase OF\n    0: G := TRUE; Y := FALSE; R := FALSE; Timer(IN := TRUE, PT := T#10s);\n       IF Timer.Q THEN Phase := 1; Timer(IN := FALSE); END_IF;\n    1: G := FALSE; Y := TRUE; R := FALSE; Timer(IN := TRUE, PT := T#3s);\n       IF Timer.Q THEN Phase := 2; Timer(IN := FALSE); END_IF;\n    2: G := FALSE; Y := FALSE; R := TRUE; Timer(IN := TRUE, PT := T#13s);\n       IF Timer.Q THEN Phase := 0; Timer(IN := FALSE); END_IF;\nEND_CASE;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "traffic light 10s/3s/13s cycle",
+    "steps": [
+     {
+      "cycles": 5,
+      "dt_ms": 100,
+      "expect": {
+       "G": true,
+       "Y": false,
+       "R": false
+      }
+     },
+     {
+      "cycles": 95,
+      "dt_ms": 100,
+      "expect": {
+       "G": true,
+       "Y": false,
+       "R": false
+      }
+     },
+     {
+      "cycles": 5,
+      "dt_ms": 100,
+      "expect": {
+       "G": false,
+       "Y": true,
+       "R": false
+      }
+     },
+     {
+      "cycles": 35,
+      "dt_ms": 100,
+      "expect": {
+       "G": false,
+       "Y": false,
+       "R": true
+      }
+     },
+     {
+      "cycles": 135,
+      "dt_ms": 100,
+      "expect": {
+       "G": true,
+       "Y": false,
+       "R": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T17",
+  "title": "Signal Debounce",
+  "complexity": "intermediate",
+  "requirement": "Filter out noise on a digital input; signal must be stable for 50ms. * **I/O Variables**: * Input: `RawIn` (BOOL) * Output: `FilteredOut` (BOOL)",
+  "inputs": [
+   {
+    "name": "RawIn",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "FilteredOut",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T17_Debounce\nVAR_INPUT\nRawIn : BOOL;\nEND_VAR\nVAR_OUTPUT\nFilteredOut : BOOL;\nEND_VAR\nVAR\nT_On : TON;\nT_Off : TOF;\nEND_VAR\nT_On(IN := RawIn, PT := T#50ms);\nT_Off(IN := T_On.Q, PT := T#50ms);\nFilteredOut := T_Off.Q;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "50ms debounce on and off",
+    "steps": [
+     {
+      "cycles": 6,
+      "dt_ms": 10,
+      "in": {
+       "RawIn": true
+      },
+      "expect": {
+       "FilteredOut": true
+      }
+     },
+     {
+      "cycles": 4,
+      "dt_ms": 10,
+      "in": {
+       "RawIn": false
+      },
+      "expect": {
+       "FilteredOut": true
+      }
+     },
+     {
+      "cycles": 6,
+      "dt_ms": 10,
+      "expect": {
+       "FilteredOut": false
+      }
+     },
+     {
+      "cycles": 2,
+      "dt_ms": 10,
+      "in": {
+       "RawIn": true
+      },
+      "expect": {
+       "FilteredOut": false
+      }
+     },
+     {
+      "cycles": 4,
+      "dt_ms": 10,
+      "expect": {
+       "FilteredOut": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T18",
+  "title": "Bottle Filling Station",
+  "complexity": "intermediate",
+  "requirement": "Semi-automatic bottle filler with 4 states: Idle (all off), Feeding (conveyor runs until BottleDetected), Filling (conveyor stops, fill valve opens until FullSignal), Discharge (conveyor runs until the bottle leaves the sensor, then back to Idle).",
+  "inputs": [
+   {
+    "name": "Start",
+    "type": "BOOL"
+   },
+   {
+    "name": "BottleDetected",
+    "type": "BOOL"
+   },
+   {
+    "name": "FullSignal",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Conveyor",
+    "type": "BOOL"
+   },
+   {
+    "name": "FillValve",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "State : INT",
+  "ground_truth": "FUNCTION_BLOCK T18_FillStation\nVAR_INPUT\n    Start : BOOL;\n    BottleDetected : BOOL;\n    FullSignal : BOOL;\nEND_VAR\nVAR_OUTPUT\n    Conveyor : BOOL;\n    FillValve : BOOL;\nEND_VAR\nVAR\n    State : INT; (* 0: Idle, 1: Feeding, 2: Filling, 3: Discharge *)\nEND_VAR\n    CASE State OF\n        0: Conveyor := FALSE; FillValve := FALSE;\n           IF Start THEN State := 1; END_IF;\n        1: Conveyor := TRUE; FillValve := FALSE;\n           IF BottleDetected THEN State := 2; END_IF;\n        2: Conveyor := FALSE; FillValve := TRUE;\n           IF FullSignal THEN State := 3; END_IF;\n        3: Conveyor := TRUE; FillValve := FALSE;\n           IF NOT BottleDetected THEN State := 0; END_IF;\n    END_CASE;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "fill cycle through 4 states",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Start": true,
+       "BottleDetected": false,
+       "FullSignal": false
+      },
+      "expect": {
+       "Conveyor": false,
+       "FillValve": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Start": false
+      },
+      "expect": {
+       "Conveyor": true,
+       "FillValve": false
+      }
+     },
+     {
+      "cycles": 2,
+      "dt_ms": 100,
+      "in": {
+       "BottleDetected": true
+      },
+      "expect": {
+       "Conveyor": false,
+       "FillValve": true
+      }
+     },
+     {
+      "cycles": 2,
+      "dt_ms": 100,
+      "in": {
+       "FullSignal": true
+      },
+      "expect": {
+       "Conveyor": true,
+       "FillValve": false
+      }
+     },
+     {
+      "cycles": 2,
+      "dt_ms": 100,
+      "in": {
+       "FullSignal": false,
+       "BottleDetected": false
+      },
+      "expect": {
+       "Conveyor": false,
+       "FillValve": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T19",
+  "title": "Moving Average (3 Samples)",
+  "complexity": "intermediate",
+  "requirement": "Provide the average of the last three inputs. * **I/O Variables**: * Input: `NewVal` (REAL) * Output: `Avg` (REAL)",
+  "inputs": [
+   {
+    "name": "NewVal",
+    "type": "REAL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Avg",
+    "type": "REAL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T19_Average\nVAR_INPUT\n    NewVal : REAL;\nEND_VAR\nVAR_OUTPUT\n    Avg : REAL;\nEND_VAR\nVAR\n    Buf : ARRAY[0..2] OF REAL;\nEND_VAR\nBuf[2] := Buf[1];\nBuf[1] := Buf[0];\nBuf[0] := NewVal;\nAvg := (Buf[0] + Buf[1] + Buf[2]) / 3.0;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "moving average of 3",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "NewVal": 10.0
+      },
+      "expect_approx": {
+       "Avg": {
+        "value": 3.3333333333333335,
+        "tol": 0.01
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "NewVal": 20.0
+      },
+      "expect_approx": {
+       "Avg": {
+        "value": 10.0,
+        "tol": 0.01
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "NewVal": 30.0
+      },
+      "expect_approx": {
+       "Avg": {
+        "value": 20.0,
+        "tol": 0.01
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "NewVal": 0.0
+      },
+      "expect_approx": {
+       "Avg": {
+        "value": 16.666666666666668,
+        "tol": 0.01
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T20",
+  "title": "Ramp Function",
+  "complexity": "intermediate",
+  "requirement": "Gradually increase/decrease output toward a setpoint. * **I/O Variables**: * Inputs: `Setpoint` (REAL), `Rate` (REAL) * Output: `Out` (REAL)",
+  "inputs": [
+   {
+    "name": "Setpoint",
+    "type": "REAL"
+   },
+   {
+    "name": "Rate",
+    "type": "REAL"
+   }
+  ],
+  "outputs": [],
+  "io_vars": [
+   {
+    "name": "Out",
+    "type": "REAL"
+   }
+  ],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T20_Ramp\nVAR_INPUT\n    Setpoint : REAL;\n    Rate : REAL;\nEND_VAR\nVAR_IN_OUT\n    Out : REAL;\nEND_VAR\nIF Out < Setpoint THEN\n    Out := Out + Rate;\n    IF Out > Setpoint THEN Out := Setpoint; END_IF;\nELSIF Out > Setpoint THEN\n    Out := Out - Rate;\n    IF Out < Setpoint THEN Out := Setpoint; END_IF;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "ramp up to setpoint with clamp",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Setpoint": 10.0,
+       "Rate": 3.0
+      },
+      "io": {
+       "Out": 0.0
+      },
+      "expect_approx": {
+       "Out": {
+        "value": 3.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 6.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 9.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 10.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Setpoint": 0.0
+      },
+      "expect_approx": {
+       "Out": {
+        "value": 7.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 4.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 1.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 0.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T21",
+  "title": "Batch Mixing State Machine",
+  "complexity": "advanced",
+  "requirement": "Manage states: Idle, Filling, Mixing, Emptying. * **I/O Variables**: * Inputs: `Start` (BOOL), `LevelFull` (BOOL), `LevelEmpty` (BOOL) * Outputs: `FillValve` (BOOL), `Motor` (BOOL), `DrainValve` (BOOL)",
+  "inputs": [
+   {
+    "name": "Start",
+    "type": "BOOL"
+   },
+   {
+    "name": "LevelFull",
+    "type": "BOOL"
+   },
+   {
+    "name": "LevelEmpty",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "FillValve",
+    "type": "BOOL"
+   },
+   {
+    "name": "Motor",
+    "type": "BOOL"
+   },
+   {
+    "name": "DrainValve",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T21_Batch\nVAR_INPUT\n    Start, LevelFull, LevelEmpty : BOOL;\nEND_VAR\nVAR_OUTPUT\n    FillValve, Motor, DrainValve : BOOL;\nEND_VAR\nVAR\n    State : INT; (* 0: Idle, 1: Fill, 2: Mix, 3: Drain *)\n    MixTimer : TON;\nEND_VAR\nCASE State OF\n    0: IF Start THEN State := 1; END_IF;\n    1: FillValve := TRUE; IF LevelFull THEN State := 2; FillValve := FALSE; END_IF;\n    2: Motor := TRUE; MixTimer(IN := TRUE, PT := T#10s);\n       IF MixTimer.Q THEN State := 3; Motor := FALSE; MixTimer(IN := FALSE); END_IF;\n    3: DrainValve := TRUE; IF LevelEmpty THEN State := 0; DrainValve := FALSE; END_IF;\nEND_CASE;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "batch mix cycle",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Start": true,
+       "LevelFull": false,
+       "LevelEmpty": false
+      },
+      "expect": {
+       "FillValve": false,
+       "Motor": false,
+       "DrainValve": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Start": false
+      },
+      "expect": {
+       "FillValve": true,
+       "Motor": false,
+       "DrainValve": false
+      }
+     },
+     {
+      "cycles": 2,
+      "dt_ms": 100,
+      "in": {
+       "LevelFull": true
+      },
+      "expect": {
+       "FillValve": false,
+       "Motor": true,
+       "DrainValve": false
+      }
+     },
+     {
+      "cycles": 99,
+      "dt_ms": 100,
+      "in": {
+       "LevelFull": false
+      },
+      "expect": {
+       "FillValve": false,
+       "Motor": true,
+       "DrainValve": false
+      }
+     },
+     {
+      "cycles": 2,
+      "dt_ms": 100,
+      "expect": {
+       "FillValve": false,
+       "Motor": false,
+       "DrainValve": true
+      }
+     },
+     {
+      "cycles": 2,
+      "dt_ms": 100,
+      "in": {
+       "LevelEmpty": true
+      },
+      "expect": {
+       "FillValve": false,
+       "Motor": false,
+       "DrainValve": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "LevelEmpty": false
+      },
+      "expect": {
+       "FillValve": false,
+       "Motor": false,
+       "DrainValve": false
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T22",
+  "title": "Simple PID Controller",
+  "complexity": "advanced",
+  "requirement": "Implement basic Proportional-Integral-Derivative control logic. * **I/O Variables**: * Inputs: `PV` (REAL), `SP` (REAL), `Kp` (REAL), `Ki` (REAL), `Kd` (REAL) * Output: `Out` (REAL)",
+  "inputs": [
+   {
+    "name": "PV",
+    "type": "REAL"
+   },
+   {
+    "name": "SP",
+    "type": "REAL"
+   },
+   {
+    "name": "Kp",
+    "type": "REAL"
+   },
+   {
+    "name": "Ki",
+    "type": "REAL"
+   },
+   {
+    "name": "Kd",
+    "type": "REAL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Out",
+    "type": "REAL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T22_PID\nVAR_INPUT\n    PV, SP, Kp, Ki, Kd : REAL;\nEND_VAR\nVAR_OUTPUT\n    Out : REAL;\nEND_VAR\nVAR\n    Error, LastError, IntAccum, Deriv : REAL;\nEND_VAR\n    Error := SP - PV;\n    IntAccum := IntAccum + Error;\n    Deriv := Error - LastError;\n    Out := (Kp * Error) + (Ki * IntAccum) + (Kd * Deriv);\n    LastError := Error;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "pure P action",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PV": 8.0,
+       "SP": 10.0,
+       "Kp": 2.0,
+       "Ki": 0.0,
+       "Kd": 0.0
+      },
+      "expect_approx": {
+       "Out": {
+        "value": 4.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 4.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   },
+   {
+    "name": "PI action accumulates",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PV": 9.0,
+       "SP": 10.0,
+       "Kp": 1.0,
+       "Ki": 0.5,
+       "Kd": 0.0
+      },
+      "expect_approx": {
+       "Out": {
+        "value": 1.5,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 2.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Out": {
+        "value": 2.5,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   },
+   {
+    "name": "zero error gives zero output (P only)",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "PV": 10.0,
+       "SP": 10.0,
+       "Kp": 3.0,
+       "Ki": 0.0,
+       "Kd": 0.0
+      },
+      "expect_approx": {
+       "Out": {
+        "value": 0.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T23",
+  "title": "Array Maximum Finder",
+  "complexity": "advanced",
+  "requirement": "Iterate through an array of 10 integers to find the highest value. * **I/O Variables**: * Input: `Vals` (ARRAY[0..9] OF INT) * Output: `MaxVal` (INT)",
+  "inputs": [
+   {
+    "name": "Vals",
+    "type": "ARRAY[0..9] OF INT"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "MaxVal",
+    "type": "INT"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T23_ArrayMax\nVAR_INPUT\n    Vals : ARRAY[0..9] OF INT;\nEND_VAR\nVAR_OUTPUT\n    MaxVal : INT;\nEND_VAR\nVAR\n    i : INT;\nEND_VAR\nMaxVal := Vals[0];\nFOR i := 1 TO 9 DO\n    IF Vals[i] > MaxVal THEN\n        MaxVal := Vals[i];\n    END_IF;\nEND_FOR;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "find maximum of 10",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Vals": [
+        3,
+        -7,
+        15,
+        0,
+        9,
+        2,
+        8,
+        1,
+        5,
+        4
+       ]
+      },
+      "expect": {
+       "MaxVal": 15
+      }
+     }
+    ]
+   },
+   {
+    "name": "all equal values",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      "expect": {
+       "MaxVal": 2
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T24",
+  "title": "Alarm Latching and Ack",
+  "complexity": "advanced",
+  "requirement": "Latch alarm until condition cleared and Acknowledged. * **I/O Variables**: * Inputs: `Fault` (BOOL), `Ack` (BOOL) * Output: `AlarmActive` (BOOL)",
+  "inputs": [
+   {
+    "name": "Fault",
+    "type": "BOOL"
+   },
+   {
+    "name": "Ack",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "AlarmActive",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T24_Alarm\nVAR_INPUT\n    Fault : BOOL;\n    Ack : BOOL;\nEND_VAR\nVAR_OUTPUT\n    AlarmActive : BOOL;\nEND_VAR\nVAR\n    Latched : BOOL;\nEND_VAR\nIF Fault THEN Latched := TRUE; END_IF;\nIF Ack AND NOT Fault THEN Latched := FALSE; END_IF;\nAlarmActive := Latched;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "alarm latch and acknowledge",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Fault": false,
+       "Ack": false
+      },
+      "expect": {
+       "AlarmActive": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Fault": true
+      },
+      "expect": {
+       "AlarmActive": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Fault": false
+      },
+      "expect": {
+       "AlarmActive": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Ack": true
+      },
+      "expect": {
+       "AlarmActive": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Ack": false
+      },
+      "expect": {
+       "AlarmActive": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Fault": true,
+       "Ack": true
+      },
+      "expect": {
+       "AlarmActive": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T25",
+  "title": "Cyclic Redundancy Check (CRC-8)",
+  "complexity": "advanced",
+  "requirement": "Calculate a basic XOR-based checksum for 4 bytes. * **I/O Variables**: * Input: `Data` (ARRAY[0..3] OF BYTE) * Output: `CRC` (BYTE)",
+  "inputs": [
+   {
+    "name": "Data",
+    "type": "ARRAY[0..3] OF BYTE"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "CRC",
+    "type": "BYTE"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T25_CRC8\nVAR_INPUT\n    Data : ARRAY[0..3] OF BYTE;\nEND_VAR\nVAR_OUTPUT\n    CRC : BYTE;\nEND_VAR\nVAR\n    i : INT;\nEND_VAR\nCRC := 16#FF;\nFOR i := 0 TO 3 DO\n    CRC := CRC XOR Data[i];\nEND_FOR;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "XOR checksum of 4 bytes",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Data": [
+        1,
+        2,
+        3,
+        4
+       ]
+      },
+      "expect": {
+       "CRC": 251
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Data": [
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      "expect": {
+       "CRC": 255
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Data": [
+        255,
+        255,
+        255,
+        255
+       ]
+      },
+      "expect": {
+       "CRC": 255
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T26",
+  "title": "Linear Interpolation (XY Lookup)",
+  "complexity": "advanced",
+  "requirement": "Calculate Y for a given X based on two points (X1,Y1) and (X2,Y2). * **I/O Variables**: * Inputs: `X`, `X1`, `Y1`, `X2`, `Y2` (REAL) * Output: `Y` (REAL)",
+  "inputs": [
+   {
+    "name": "X",
+    "type": "REAL"
+   },
+   {
+    "name": "X1",
+    "type": "REAL"
+   },
+   {
+    "name": "Y1",
+    "type": "REAL"
+   },
+   {
+    "name": "X2",
+    "type": "REAL"
+   },
+   {
+    "name": "Y2",
+    "type": "REAL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Y",
+    "type": "REAL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T26_Interpolate\nVAR_INPUT\n    X, X1, Y1, X2, Y2 : REAL;\nEND_VAR\nVAR_OUTPUT\n    Y : REAL;\nEND_VAR\nIF (X2 - X1) <> 0.0 THEN\n    Y := Y1 + (X - X1) * (Y2 - Y1) / (X2 - X1);\nELSE\n    Y := Y1;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "midpoint interpolation",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "X": 5.0,
+       "X1": 0.0,
+       "Y1": 0.0,
+       "X2": 10.0,
+       "Y2": 100.0
+      },
+      "expect_approx": {
+       "Y": {
+        "value": 50.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "X": 0.0
+      },
+      "expect_approx": {
+       "Y": {
+        "value": 0.0,
+        "tol": 0.001
+       }
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "X": 10.0
+      },
+      "expect_approx": {
+       "Y": {
+        "value": 100.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   },
+   {
+    "name": "degenerate segment falls back to Y1",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "X": 1.0,
+       "X1": 2.0,
+       "Y1": 7.0,
+       "X2": 2.0,
+       "Y2": 99.0
+      },
+      "expect_approx": {
+       "Y": {
+        "value": 7.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T27",
+  "title": "Bubble Sort (Small Array)",
+  "complexity": "advanced",
+  "requirement": "Sort 5 integers in ascending order. * **I/O Variables**: * In_Out: `Arr` (ARRAY[0..4] OF INT)",
+  "inputs": [],
+  "outputs": [],
+  "io_vars": [
+   {
+    "name": "Arr",
+    "type": "ARRAY[0..4] OF INT"
+   }
+  ],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T27_Sort\nVAR_IN_OUT\n    Arr : ARRAY[0..4] OF INT;\nEND_VAR\nVAR\n    i, j, Temp : INT;\nEND_VAR\nFOR i := 0 TO 3 DO\n    FOR j := 0 TO 3 - i DO\n        IF Arr[j] > Arr[j+1] THEN\n            Temp := Arr[j];\n            Arr[j] := Arr[j+1];\n            Arr[j+1] := Temp;\n        END_IF;\n    END_FOR;\nEND_FOR;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "sort 5 integers ascending",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "io": {
+       "Arr": [
+        5,
+        1,
+        4,
+        2,
+        3
+       ]
+      },
+      "expect": {
+       "Arr": [
+        1,
+        2,
+        3,
+        4,
+        5
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "name": "already sorted stays put",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "io": {
+       "Arr": [
+        1,
+        2,
+        3,
+        4,
+        5
+       ]
+      },
+      "expect": {
+       "Arr": [
+        1,
+        2,
+        3,
+        4,
+        5
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "name": "descending input fully reversed",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "io": {
+       "Arr": [
+        9,
+        7,
+        5,
+        3,
+        1
+       ]
+      },
+      "expect": {
+       "Arr": [
+        1,
+        3,
+        5,
+        7,
+        9
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T28",
+  "title": "Frequency Measurement",
+  "complexity": "advanced",
+  "requirement": "Calculate frequency (Hz) based on pulses per second. * **I/O Variables**: * Input: `Pulse` (BOOL) * Output: `Freq` (REAL)",
+  "inputs": [
+   {
+    "name": "Pulse",
+    "type": "BOOL"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Freq",
+    "type": "REAL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T28_Freq\nVAR_INPUT\n    Pulse : BOOL;\nEND_VAR\nVAR_OUTPUT\n    Freq : REAL;\nEND_VAR\nVAR\n    Count : INT;\n    LastPulse : BOOL;\n    Timer : TON;\nEND_VAR\nIF Pulse AND NOT LastPulse THEN Count := Count + 1; END_IF;\nLastPulse := Pulse;\nTimer(IN := TRUE, PT := T#1s);\nIF Timer.Q THEN\n    Freq := INT_TO_REAL(Count);\n    Count := 0;\n    Timer(IN := FALSE);\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "3 pulses within 1s window → 3 Hz",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Pulse": true
+      },
+      "expect": {
+       "Freq": 0.0
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Pulse": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Pulse": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Pulse": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Pulse": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Pulse": false
+      }
+     },
+     {
+      "cycles": 5,
+      "dt_ms": 100,
+      "expect_approx": {
+       "Freq": {
+        "value": 3.0,
+        "tol": 0.001
+       }
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T29",
+  "title": "Modbus Payload Packing",
+  "complexity": "advanced",
+  "requirement": "Pack two 16-bit INTs into a 4-byte array. * **I/O Variables**: * Inputs: `Val1` (INT), `Val2` (INT) * Output: `Payload` (ARRAY[0..3] OF BYTE)",
+  "inputs": [
+   {
+    "name": "Val1",
+    "type": "INT"
+   },
+   {
+    "name": "Val2",
+    "type": "INT"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "Payload",
+    "type": "ARRAY[0..3] OF BYTE"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T29_ModbusPack\nVAR_INPUT\n    Val1, Val2 : INT;\nEND_VAR\nVAR_OUTPUT\n    Payload : ARRAY[0..3] OF BYTE;\nEND_VAR\nVAR\n    W1, W2 : WORD;\nEND_VAR\n    W1 := INT_TO_WORD(Val1);\n    W2 := INT_TO_WORD(Val2);\n    Payload[0] := WORD_TO_BYTE(SHR(W1, 8));\n    Payload[1] := WORD_TO_BYTE(W1 AND 16#00FF);\n    Payload[2] := WORD_TO_BYTE(SHR(W2, 8));\n    Payload[3] := WORD_TO_BYTE(W2 AND 16#00FF);\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "pack two INTs big-endian",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val1": 4660,
+       "Val2": -21555
+      },
+      "expect": {
+       "Payload": [
+        18,
+        52,
+        171,
+        205
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "name": "zero values",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "Val1": 0,
+       "Val2": 258
+      },
+      "expect": {
+       "Payload": [
+        0,
+        0,
+        1,
+        2
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "T30",
+  "title": "Elevator Cabin Logic",
+  "complexity": "advanced",
+  "requirement": "Control movement between 3 floors based on calls. * **I/O Variables**: * Inputs: `CallFloor` (INT), `AtFloor` (INT) * Outputs: `MotorUp` (BOOL), `MotorDown` (BOOL)",
+  "inputs": [
+   {
+    "name": "CallFloor",
+    "type": "INT"
+   },
+   {
+    "name": "AtFloor",
+    "type": "INT"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "MotorUp",
+    "type": "BOOL"
+   },
+   {
+    "name": "MotorDown",
+    "type": "BOOL"
+   }
+  ],
+  "io_vars": [],
+  "locals_raw": "",
+  "ground_truth": "FUNCTION_BLOCK T30_Elevator\nVAR_INPUT\nCallFloor : INT;\nAtFloor : INT;\nEND_VAR\nVAR_OUTPUT\nMotorUp : BOOL;\nMotorDown : BOOL;\nEND_VAR\nIF CallFloor > AtFloor THEN\nMotorUp := TRUE;\nMotorDown := FALSE;\nELSIF CallFloor < AtFloor THEN\nMotorUp := FALSE;\nMotorDown := TRUE;\nELSE\nMotorUp := FALSE;\nMotorDown := FALSE;\nEND_IF;\nEND_FUNCTION_BLOCK",
+  "tests": [
+   {
+    "name": "elevator direction 3 floors",
+    "steps": [
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CallFloor": 3,
+       "AtFloor": 2
+      },
+      "expect": {
+       "MotorUp": true,
+       "MotorDown": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CallFloor": 1,
+       "AtFloor": 2
+      },
+      "expect": {
+       "MotorUp": false,
+       "MotorDown": true
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CallFloor": 2,
+       "AtFloor": 2
+      },
+      "expect": {
+       "MotorUp": false,
+       "MotorDown": false
+      }
+     },
+     {
+      "cycles": 1,
+      "dt_ms": 100,
+      "in": {
+       "CallFloor": 3,
+       "AtFloor": 3
+      },
+      "expect": {
+       "MotorUp": false,
+       "MotorDown": false
+      }
+     }
+    ]
+   }
+  ]
+ }
+]

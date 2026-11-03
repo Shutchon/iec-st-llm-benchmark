@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.level2_cache/
+temp_st_compile/
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+.DS_Store
